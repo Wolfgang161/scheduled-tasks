@@ -14,6 +14,7 @@ import os
 
 # import os and use it to get the Github repository secrets
 MY_EMAIL = os.environ.get("MY_EMAIL")
+MY_2EMAIL = os.environ.get("MY_2EMAIL")
 MY_PASSWORD = os.environ.get("MY_PASSWORD")
 
 today = datetime.now()
@@ -27,12 +28,11 @@ if today_tuple in birthdays_dict:
     with open(file_path) as letter_file:
         contents = letter_file.read()
         contents = contents.replace("[NAME]", birthday_person["name"])
-
-    with smtplib.SMTP("YOUR EMAIL PROVIDER SMTP SERVER ADDRESS") as connection:
+    with smtplib.SMTP("smtp.gmail.com", port=587) as connection:
         connection.starttls()
         connection.login(MY_EMAIL, MY_PASSWORD)
         connection.sendmail(
             from_addr=MY_EMAIL,
-            to_addrs=birthday_person["email"],
+            to_addrs=MY_2EMAIL,
             msg=f"Subject:Achtung Geburtstag! {birthday_person["name"]}\n\n{contents}"
         )
